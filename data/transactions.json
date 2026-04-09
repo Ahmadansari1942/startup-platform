@@ -1,0 +1,71 @@
+{
+  "transactions": [
+    {
+      "id": "TXN-2024-001",
+      "date": "2024-01-15",
+      "customer": "Ahmad Khan",
+      "email": "ahmad@example.com",
+      "amount": 299,
+      "currency": "USD",
+      "status": "completed",
+      "method": "Credit Card",
+      "product": "SaaS Starter Kit",
+      "invoice": "INV-001"
+    },
+    {
+      "id": "TXN-2024-002",
+      "date": "2024-01-14",
+      "customer": "Sarah Johnson",
+      "email": "sarah@company.com",
+      "amount": 499,
+      "currency": "USD",
+      "status": "completed",
+      "method": "PayPal",
+      "product": "E-commerce Pro",
+      "invoice": "INV-002"
+    },
+    {
+      "id": "TXN-2024-003",
+      "date": "2024-01-14",
+      "customer": "Mike Chen",
+      "email": "mike@startup.io",
+      "amount": 199,
+      "currency": "USD",
+      "status": "pending",
+      "method": "Credit Card",
+      "product": "AI Chatbot Integration",
+      "invoice": "INV-003"
+    },
+    {
+      "id": "TXN-2024-004",
+      "date": "2024-01-13",
+      "customer": "Emma Wilson",
+      "email": "emma@design.co",
+      "amount": 149,
+      "currency": "USD",
+      "status": "completed",
+      "method": "Stripe",
+      "product": "Mobile App Template",
+      "invoice": "INV-004"
+    },
+    {
+      "id": "TXN-2024-005",
+      "date": "2024-01-13",
+      "customer": "David Brown",
+      "email": "david@tech.com",
+      "amount": 399,
+      "currency": "USD",
+      "status": "failed",
+      "method": "Credit Card",
+      "product": "DevOps Automation Suite",
+      "invoice": "INV-005"
+    }
+  ],
+  "summary": {
+    "totalRevenue": 125430,
+    "totalTransactions": 450,
+    "averageOrder": 278,
+    "refundRate": 2.3,
+    "successRate": 96.7
+  }
+}
