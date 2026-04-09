@@ -1,0 +1,70 @@
+{
+  "team": [
+    {
+      "id": 1,
+      "name": "Ahmad Ansari",
+      "role": "Founder & CEO",
+      "image": "https://ui-avatars.com/api/?name=Ahmad+Ansari&background=0D8ABC&color=fff&size=200",
+      "bio": "Full-stack developer with 10+ years experience. Built 3 successful startups.",
+      "location": "Karachi, Pakistan",
+      "social": {
+        "twitter": "https://twitter.com/ahmadansari",
+        "linkedin": "https://linkedin.com/in/ahmadansari",
+        "github": "https://github.com/ahmadansari1942"
+      },
+      "skills": ["Node.js", "React", "AWS", "System Design"],
+      "joined": "2020-01-01"
+    },
+    {
+      "id": 2,
+      "name": "Fatima Zahra",
+      "role": "Chief Design Officer",
+      "image": "https://ui-avatars.com/api/?name=Fatima+Zahra&background=E91E63&color=fff&size=200",
+      "bio": "Award-winning designer. Previously led design at Careem and Foodpanda.",
+      "location": "Lahore, Pakistan",
+      "social": {
+        "twitter": "https://twitter.com/fatimazahra",
+        "linkedin": "https://linkedin.com/in/fatimazahra",
+        "dribbble": "https://dribbble.com/fatimazahra"
+      },
+      "skills": ["UI/UX", "Figma", "Design Systems", "Branding"],
+      "joined": "2020-03-15"
+    },
+    {
+      "id": 3,
+      "name": "Usman Ghani",
+      "role": "CTO",
+      "image": "https://ui-avatars.com/api/?name=Usman+Ghani&background=4CAF50&color=fff&size=200",
+      "bio": "Ex-Google engineer. Expert in scalable architecture and AI/ML.",
+      "location": "Islamabad, Pakistan",
+      "social": {
+        "twitter": "https://twitter.com/usmanghani",
+        "linkedin": "https://linkedin.com/in/usmanghani",
+        "github": "https://github.com/usmanghani"
+      },
+      "skills": ["Python", "TensorFlow", "Kubernetes", "Microservices"],
+      "joined": "2020-06-01"
+    },
+    {
+      "id": 4,
+      "name": "Ayesha Malik",
+      "role": "Head of Marketing",
+      "image": "https://ui-avatars.com/api/?name=Ayesha+Malik&background=9C27B0&color=fff&size=200",
+      "bio": "Growth hacker. Scaled 5 startups from 0 to 1M users.",
+      "location": "Karachi, Pakistan",
+      "social": {
+        "twitter": "https://twitter.com/ayeshamalik",
+        "linkedin": "https://linkedin.com/in/ayeshamalik"
+      },
+      "skills": ["Growth Hacking", "SEO", "Content Strategy", "Analytics"],
+      "joined": "2021-01-10"
+    }
+  ],
+  "departments": [
+    { "name": "Engineering", "count": 12, "head": "Usman Ghani" },
+    { "name": "Design", "count": 8, "head": "Fatima Zahra" },
+    { "name": "Marketing", "count": 6, "head": "Ayesha Malik" },
+    { "name": "Sales", "count": 5, "head": "Bilal Ahmed" },
+    { "name": "Support", "count": 4, "head": "Sana Khan" }
+  ]
+}
