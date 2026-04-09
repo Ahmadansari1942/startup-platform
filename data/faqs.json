@@ -1,0 +1,40 @@
+{
+  "faqs": [
+    {
+      "id": 1,
+      "question": "What is included in the SaaS Starter Kit?",
+      "answer": "Our SaaS Starter Kit includes complete authentication system, database integration, payment processing with Stripe, email service integration, admin dashboard, user management, and deployment scripts. Everything you need to launch your SaaS in days, not months.",
+      "category": "Products"
+    },
+    {
+      "id": 2,
+      "question": "Do you offer refunds?",
+      "answer": "Yes! We offer a 30-day money-back guarantee on all our products. If you're not satisfied, simply email us within 30 days of purchase for a full refund, no questions asked.",
+      "category": "Billing"
+    },
+    {
+      "id": 3,
+      "question": "Can I use these products for client projects?",
+      "answer": "Absolutely! Our Extended License allows you to use our products in unlimited client projects. You can also use them in commercial products that you sell to end customers.",
+      "category": "Licensing"
+    },
+    {
+      "id": 4,
+      "question": "How do I get support?",
+      "answer": "We offer multiple support channels: email support (24-48 hour response), community Discord server, and priority support for Pro members. All products also include detailed documentation and video tutorials.",
+      "category": "Support"
+    },
+    {
+      "id": 5,
+      "question": "Are the products updated regularly?",
+      "answer": "Yes! We update our products monthly with security patches, new features, and compatibility updates. Once you purchase, you get lifetime access to all future updates for that product.",
+      "category": "Products"
+    },
+    {
+      "id": 6,
+      "question": "Do you offer custom development services?",
+      "answer": "Yes, our team is available for custom development projects. Whether you need a custom feature, integration, or a completely new product built from scratch, we can help. Contact us for a quote.",
+      "category": "Services"
+    }
+  ]
+}
