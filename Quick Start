@@ -1,0 +1,19 @@
+# 1. Folder structure banao
+mkdir startup-platform-mock
+cd startup-platform-mock
+
+# 2. Files copy karo (jo maine diye hain upar)
+
+# 3. Dependencies install
+npm install
+
+# 4. CSS build
+npx tailwindcss init -p
+npm run build:css
+
+# 5. Server start
+npm start
+
+# 6. Browser mein khol
+# http://localhost:3000
+# http://localhost:3000/dashboard
