@@ -1,170 +1,210 @@
-/**
- * Startup Platform - Production Ready Node.js Application
- * Features: Express, MongoDB, Authentication, File Upload, Dark Mode
- */
+<%- contentFor('body') %>
 
-require('dotenv').config();
-const express = require('express');
-const path = require('path');
-const mongoose = require('mongoose');
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
-const passport = require('passport');
-const morgan = require('morgan');
-const flash = require('express-flash');
-const compression = require('compression');
-const helmet = require('helmet');
-const cors = require('cors');
-const methodOverride = require('method-override');
+<div class="min-h-screen bg-gray-50 dark:bg-dark-bg pt-20 pb-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Header -->
+    <div class="mb-8 flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+        <p class="text-gray-600 dark:text-gray-400 mt-1">Welcome back! Here's what's happening.</p>
+      </div>
+      <div class="flex items-center space-x-4">
+        <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
+          <i class="fas fa-circle text-xs mr-1 animate-pulse"></i>
+          Live
+        </span>
+        <button class="p-2 bg-white dark:bg-dark-card rounded-lg shadow hover:shadow-md transition-shadow relative">
+          <i class="fas fa-bell text-gray-600 dark:text-gray-400"></i>
+          <% if (unreadCount > 0) { %>
+            <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+              <%= unreadCount %>
+            </span>
+          <% } %>
+        </button>
+      </div>
+    </div>
 
-// Import configurations
-const logger = require('./src/utils/logger');
-require('./src/config/passport');
+    <!-- Stats Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Revenue -->
+      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm hover-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
+            <i class="fas fa-dollar-sign text-blue-600 text-xl"></i>
+          </div>
+          <span class="text-green-500 text-sm font-medium">+<%= stats.revenue.growth %>%</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">$<%= stats.revenue.current.toLocaleString() %></h3>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">Total Revenue</p>
+      </div>
 
-// Import routes
-const mainRoutes = require('./src/routes/main');
-const authRoutes = require('./src/routes/auth');
-const dashboardRoutes = require('./src/routes/dashboard');
-const apiRoutes = require('./src/routes/api');
+      <!-- Users -->
+      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm hover-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
+            <i class="fas fa-users text-purple-600 text-xl"></i>
+          </div>
+          <span class="text-green-500 text-sm font-medium">+<%= stats.users.growth %>%</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white"><%= stats.users.current.toLocaleString() %></h3>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">Active Users</p>
+      </div>
 
-// Import middleware
-const errorHandler = require('./src/middleware/errorHandler');
+      <!-- Orders -->
+      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm hover-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
+            <i class="fas fa-shopping-cart text-orange-600 text-xl"></i>
+          </div>
+          <span class="text-green-500 text-sm font-medium">+<%= stats.orders.growth %>%</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white"><%= stats.orders.current %></h3>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">Total Orders</p>
+      </div>
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-const NODE_ENV = process.env.NODE_ENV || 'development';
+      <!-- Products -->
+      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm hover-card">
+        <div class="flex items-center justify-between mb-4">
+          <div class="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center">
+            <i class="fas fa-box text-pink-600 text-xl"></i>
+          </div>
+          <span class="text-green-500 text-sm font-medium">+<%= stats.products.growth %>%</span>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 dark:text-white"><%= stats.products.current %></h3>
+        <p class="text-gray-500 dark:text-gray-400 text-sm">Products</p>
+      </div>
+    </div>
 
-// Security Middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https:", "https://fonts.googleapis.com"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com", "https://cdnjs.cloudflare.com"],
-      imgSrc: ["'self'", "data:", "https:", "https://images.unsplash.com"],
-      connectSrc: ["'self'"],
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+      <!-- Revenue Chart -->
+      <div class="lg:col-span-2 bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Revenue Overview</h3>
+        <canvas id="revenueChart" height="100"></canvas>
+      </div>
+
+      <!-- Traffic Sources -->
+      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Traffic Sources</h3>
+        <canvas id="trafficChart"></canvas>
+        <div class="mt-4 space-y-2">
+          <% charts.trafficSources.labels.forEach((label, index) => { %>
+            <div class="flex items-center justify-between text-sm">
+              <span class="flex items-center">
+                <span class="w-3 h-3 rounded-full mr-2" style="background-color: <%= charts.trafficSources.colors[index] %>"></span>
+                <%= label %>
+              </span>
+              <span class="text-gray-600 dark:text-gray-400"><%= charts.trafficSources.data[index] %>%</span>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity & Transactions -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Recent Activity -->
+      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
+        <div class="space-y-4">
+          <% charts.recentActivity.forEach(activity => { %>
+            <div class="flex items-center space-x-4 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors">
+              <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold">
+                <%= activity.user.charAt(0) %>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-gray-900 dark:text-white">
+                  <%= activity.user %> 
+                  <span class="text-gray-500 dark:text-gray-400"><%= activity.action %></span>
+                  <%= activity.item %>
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400"><%= activity.time %></p>
+              </div>
+              <% if (activity.amount) { %>
+                <span class="text-green-500 font-medium">$<%= activity.amount %></span>
+              <% } %>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+
+      <!-- Recent Transactions -->
+      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Recent Transactions</h3>
+        <div class="space-y-3">
+          <% recentTransactions.forEach(txn => { %>
+            <div class="flex items-center justify-between p-3 border-b border-gray-100 dark:border-gray-700 last:border-0">
+              <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg flex items-center justify-center
+                  <%= txn.status === 'completed' ? 'bg-green-100 dark:bg-green-900/30 text-green-600' : 
+                      txn.status === 'pending' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600' : 
+                      'bg-red-100 dark:bg-red-900/30 text-red-600' %>">
+                  <i class="fas <%= txn.status === 'completed' ? 'fa-check' : 
+                                  txn.status === 'pending' ? 'fa-clock' : 
+                                  'fa-times' %>"></i>
+                </div>
+                <div>
+                  <p class="text-sm font-medium text-gray-900 dark:text-white"><%= txn.customer %></p>
+                  <p class="text-xs text-gray-500 dark:text-gray-400"><%= txn.id %></p>
+                </div>
+              </div>
+              <div class="text-right">
+                <p class="text-sm font-bold text-gray-900 dark:text-white">$<%= txn.amount %></p>
+                <p class="text-xs text-gray-500 dark:text-gray-400"><%= txn.date %></p>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Revenue Chart
+  const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+  new Chart(revenueCtx, {
+    type: 'line',
+    data: {
+      labels: <%- JSON.stringify(charts.revenueChart.labels) %>,
+      datasets: [{
+        label: 'Revenue ($)',
+        data: <%- JSON.stringify(charts.revenueChart.data) %>,
+        borderColor: '#3B82F6',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        tension: 0.4,
+        fill: true
+      }]
     },
-  },
-}));
-
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
-  credentials: true
-}));
-
-// Compression middleware
-app.use(compression());
-
-// Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-
-// Method override for PUT/DELETE
-app.use(methodOverride('_method'));
-
-// Static files
-app.use(express.static(path.join(__dirname, 'public')));
-
-// View engine setup
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'src/views'));
-
-// Logging with Morgan + Winston
-app.use(morgan('combined', {
-  stream: {
-    write: (message) => logger.info(message.trim())
-  }
-}));
-
-// Database connection
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/startup_platform', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    logger.info(`MongoDB Connected: ${conn.connection.host}`);
-  } catch (error) {
-    logger.error(`Database connection error: ${error.message}`);
-    process.exit(1);
-  }
-};
-
-connectDB();
-
-// Session configuration with MongoDB store
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'supersecretkeychangethis',
-  resave: false,
-  saveUninitialized: false,
-  store: MongoStore.create({
-    mongoUrl: process.env.MONGODB_URI || 'mongodb://localhost:27017/startup_platform',
-    collectionName: 'sessions',
-    ttl: 14 * 24 * 60 * 60 // 14 days
-  }),
-  cookie: {
-    secure: NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24 * 7 // 7 days
-  }
-}));
-
-// Passport authentication
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Flash messages
-app.use(flash());
-
-// Global variables middleware
-app.use((req, res, next) => {
-  res.locals.user = req.user || null;
-  res.locals.success_msg = req.flash('success_msg');
-  res.locals.error_msg = req.flash('error_msg');
-  res.locals.error = req.flash('error');
-  res.locals.NODE_ENV = NODE_ENV;
-  next();
-});
-
-// Routes
-app.use('/', mainRoutes);
-app.use('/auth', authRoutes);
-app.use('/dashboard', dashboardRoutes);
-app.use('/api', apiRoutes);
-
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'healthy',
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    environment: NODE_ENV
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+        x: { grid: { display: false } }
+      }
+    }
   });
-});
 
-// 404 handler
-app.use((req, res) => {
-  res.status(404).render('pages/404', {
-    title: 'Page Not Found',
-    user: req.user
+  // Traffic Chart
+  const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+  new Chart(trafficCtx, {
+    type: 'doughnut',
+    data: {
+      labels: <%- JSON.stringify(charts.trafficSources.labels) %>,
+      datasets: [{
+        data: <%- JSON.stringify(charts.trafficSources.data) %>,
+        backgroundColor: <%- JSON.stringify(charts.trafficSources.colors) %>,
+        borderWidth: 0
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: '70%',
+      plugins: { legend: { display: false } }
+    }
   });
-});
-
-// Global error handler
-app.use(errorHandler);
-
-// Start server
-app.listen(PORT, '0.0.0.0', () => {
-  logger.info(`Server running in ${NODE_ENV} mode on port ${PORT}`);
-  logger.info(`App URL: http://localhost:${PORT}`);
-});
-
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err) => {
-  logger.error(`Unhandled Rejection: ${err.message}`);
-  // Close server & exit process
-  server.close(() => process.exit(1));
-});
-
-module.exports = app;
+</script>
