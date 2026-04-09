@@ -1,0 +1,114 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Ahmad Khan",
+      "email": "ahmad.khan@techstart.pk",
+      "role": "founder",
+      "company": "TechStart Pakistan",
+      "avatar": "https://ui-avatars.com/api/?name=Ahmad+Khan&background=0D8ABC&color=fff",
+      "location": "Karachi, Pakistan",
+      "bio": "Full-stack developer & entrepreneur building the next big thing",
+      "joined": "2023-01-15",
+      "isActive": true,
+      "stats": {
+        "projects": 12,
+        "followers": 2450,
+        "following": 180
+      },
+      "social": {
+        "twitter": "@ahmadkhan",
+        "linkedin": "ahmadkhan",
+        "github": "ahmadkhan"
+      }
+    },
+    {
+      "id": 2,
+      "name": "Fatima Ali",
+      "email": "fatima.ali@designstudio.com",
+      "role": "admin",
+      "company": "Design Studio",
+      "avatar": "https://ui-avatars.com/api/?name=Fatima+Ali&background=E91E63&color=fff",
+      "location": "Lahore, Pakistan",
+      "bio": "Creative director specializing in UX/UI design",
+      "joined": "2023-02-20",
+      "isActive": true,
+      "stats": {
+        "projects": 28,
+        "followers": 3200,
+        "following": 450
+      },
+      "social": {
+        "twitter": "@fatimaali",
+        "linkedin": "fatimaali",
+        "dribbble": "fatimaali"
+      }
+    },
+    {
+      "id": 3,
+      "name": "Muhammad Usman",
+      "email": "usman.dev@gmail.com",
+      "role": "user",
+      "company": "Freelance",
+      "avatar": "https://ui-avatars.com/api/?name=Muhammad+Usman&background=4CAF50&color=fff",
+      "location": "Islamabad, Pakistan",
+      "bio": "React & Node.js developer",
+      "joined": "2023-03-10",
+      "isActive": true,
+      "stats": {
+        "projects": 8,
+        "followers": 890,
+        "following": 230
+      },
+      "social": {
+        "twitter": "@usmandev",
+        "github": "usmandev"
+      }
+    },
+    {
+      "id": 4,
+      "name": "Ayesha Siddiqui",
+      "email": "ayesha@innovate.pk",
+      "role": "founder",
+      "company": "Innovate Labs",
+      "avatar": "https://ui-avatars.com/api/?name=Ayesha+Siddiqui&background=9C27B0&color=fff",
+      "location": "Karachi, Pakistan",
+      "bio": "AI researcher and startup founder",
+      "joined": "2023-01-05",
+      "isActive": true,
+      "stats": {
+        "projects": 15,
+        "followers": 5600,
+        "following": 320
+      },
+      "social": {
+        "twitter": "@ayeshasiddiqui",
+        "linkedin": "ayeshasiddiqui"
+      }
+    },
+    {
+      "id": 5,
+      "name": "Bilal Ahmed",
+      "email": "bilal@cloudtech.io",
+      "role": "admin",
+      "company": "CloudTech Solutions",
+      "avatar": "https://ui-avatars.com/api/?name=Bilal+Ahmed&background=FF5722&color=fff",
+      "location": "Lahore, Pakistan",
+      "bio": "DevOps engineer and cloud architect",
+      "joined": "2023-04-12",
+      "isActive": true,
+      "stats": {
+        "projects": 35,
+        "followers": 1800,
+        "following": 290
+      },
+      "social": {
+        "twitter": "@bilalahmed",
+        "github": "bilalahmed"
+      }
+    }
+  ],
+  "totalUsers": 50,
+  "activeUsers": 42,
+  "newUsersThisMonth": 8
+}
