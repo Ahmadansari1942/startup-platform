@@ -1,0 +1,90 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "SaaS Starter Kit",
+      "description": "Complete Node.js + React boilerplate for SaaS applications",
+      "price": 299,
+      "category": "Templates",
+      "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500",
+      "rating": 4.8,
+      "reviews": 124,
+      "sales": 892,
+      "author": "Ahmad Khan",
+      "tags": ["nodejs", "react", "saas", "boilerplate"],
+      "features": ["Authentication", "Database", "Payments", "Email"],
+      "createdAt": "2023-06-15"
+    },
+    {
+      "id": 2,
+      "name": "E-commerce Pro",
+      "description": "Full-featured online store with admin dashboard",
+      "price": 499,
+      "category": "E-commerce",
+      "image": "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=500",
+      "rating": 4.9,
+      "reviews": 89,
+      "sales": 567,
+      "author": "Fatima Ali",
+      "tags": ["ecommerce", "shopify", "mern", "stripe"],
+      "features": ["Cart", "Checkout", "Inventory", "Analytics"],
+      "createdAt": "2023-07-20"
+    },
+    {
+      "id": 3,
+      "name": "AI Chatbot Integration",
+      "description": "OpenAI-powered chatbot for customer support",
+      "price": 199,
+      "category": "AI Tools",
+      "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=500",
+      "rating": 4.7,
+      "reviews": 256,
+      "sales": 1203,
+      "author": "Ayesha Siddiqui",
+      "tags": ["ai", "chatbot", "openai", "support"],
+      "features": ["NLP", "Custom Training", "Analytics", "Multi-language"],
+      "createdAt": "2023-08-05"
+    },
+    {
+      "id": 4,
+      "name": "DevOps Automation Suite",
+      "description": "CI/CD pipelines and deployment automation",
+      "price": 399,
+      "category": "DevOps",
+      "image": "https://images.unsplash.com/photo-1667372393119-3d4c48d07fc9?w=500",
+      "rating": 4.6,
+      "reviews": 67,
+      "sales": 445,
+      "author": "Bilal Ahmed",
+      "tags": ["devops", "docker", "kubernetes", "aws"],
+      "features": ["CI/CD", "Monitoring", "Auto-scaling", "Backups"],
+      "createdAt": "2023-09-12"
+    },
+    {
+      "id": 5,
+      "name": "Mobile App Template",
+      "description": "React Native starter with navigation and auth",
+      "price": 149,
+      "category": "Mobile",
+      "image": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500",
+      "rating": 4.5,
+      "reviews": 198,
+      "sales": 723,
+      "author": "Muhammad Usman",
+      "tags": ["react-native", "mobile", "ios", "android"],
+      "features": ["Navigation", "Auth", "Push Notifications", "Offline"],
+      "createdAt": "2023-10-01"
+    }
+  ],
+  "categories": [
+    { "name": "Templates", "count": 25, "icon": "fa-layer-group" },
+    { "name": "E-commerce", "count": 18, "icon": "fa-shopping-cart" },
+    { "name": "AI Tools", "count": 12, "icon": "fa-robot" },
+    { "name": "DevOps", "count": 15, "icon": "fa-server" },
+    { "name": "Mobile", "count": 20, "icon": "fa-mobile-alt" },
+    { "name": "Design", "count": 10, "icon": "fa-paint-brush" }
+  ],
+  "totalProducts": 100,
+  "totalSales": 15234,
+  "revenue": 4567800
+}
