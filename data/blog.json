@@ -1,0 +1,62 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "How to Scale Your Startup to 1M Users",
+      "slug": "scale-startup-1m-users",
+      "excerpt": "Learn the strategies used by successful startups to handle rapid growth and scale their infrastructure.",
+      "content": "Full article content here...",
+      "author": "Ahmad Ansari",
+      "authorImage": "https://ui-avatars.com/api/?name=Ahmad+Ansari&background=0D8ABC&color=fff",
+      "category": "Growth",
+      "tags": ["startup", "scaling", "infrastructure", "cloud"],
+      "image": "https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=800",
+      "publishedAt": "2024-01-10",
+      "readTime": "8 min read",
+      "views": 12500,
+      "likes": 450,
+      "comments": 32
+    },
+    {
+      "id": 2,
+      "title": "The Future of AI in SaaS Products",
+      "slug": "future-ai-saas",
+      "excerpt": "Exploring how artificial intelligence is transforming the SaaS landscape and what it means for founders.",
+      "content": "Full article content here...",
+      "author": "Usman Ghani",
+      "authorImage": "https://ui-avatars.com/api/?name=Usman+Ghani&background=4CAF50&color=fff",
+      "category": "AI",
+      "tags": ["ai", "machine-learning", "saas", "technology"],
+      "image": "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800",
+      "publishedAt": "2024-01-08",
+      "readTime": "6 min read",
+      "views": 8900,
+      "likes": 320,
+      "comments": 28
+    },
+    {
+      "id": 3,
+      "title": "Design Systems That Actually Work",
+      "slug": "design-systems-that-work",
+      "excerpt": "A practical guide to building and maintaining design systems for growing teams.",
+      "content": "Full article content here...",
+      "author": "Fatima Zahra",
+      "authorImage": "https://ui-avatars.com/api/?name=Fatima+Zahra&background=E91E63&color=fff",
+      "category": "Design",
+      "tags": ["design-systems", "ui-ux", "figma", "frontend"],
+      "image": "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800",
+      "publishedAt": "2024-01-05",
+      "readTime": "10 min read",
+      "views": 6700,
+      "likes": 280,
+      "comments": 19
+    }
+  ],
+  "categories": [
+    { "name": "Growth", "count": 15 },
+n    { "name": "AI", "count": 12 },
+    { "name": "Design", "count": 18 },
+    { "name": "Development", "count": 25 },
+    { "name": "Marketing", "count": 10 }
+  ]
+}
