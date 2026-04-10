@@ -1,3 +1,53 @@
+const express = require('express');
+const path = require('path');
+const expressLayouts = require('express-ejs-layouts');
+
+const app = express();
+
+// EJS setup
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
+app.use(expressLayouts);
+app.set('layout', 'layout');
+
+// static files
+app.use(express.static(path.join(__dirname, 'public')));
+
+// route
+app.get('/', (req, res) => {
+    res.render('dashboard', {
+        unreadCount: 3,
+        stats: {
+            revenue: { current: 5000, growth: 12 },
+            users: { current: 1200, growth: 8 },
+            orders: { current: 320, growth: 5 },
+            products: { current: 80, growth: 3 }
+        },
+        charts: {
+            revenueChart: {
+                labels: ['Jan', 'Feb', 'Mar'],
+                data: [1000, 2000, 3000]
+            },
+            trafficSources: {
+                labels: ['Google', 'Facebook', 'Direct'],
+                data: [50, 30, 20],
+                colors: ['#3B82F6', '#8B5CF6', '#10B981']
+            },
+            recentActivity: [
+                { user: 'Ahmad', action: 'bought', item: 'product', time: '2 min ago', amount: 50 }
+            ]
+        },
+        recentTransactions: [
+            { customer: 'Ali', id: '#123', amount: 100, date: 'Today', status: 'completed' }
+        ]
+    });
+});
+
+app.listen(3000, () => {
+    console.log('🚀 Server running on http://localhost:3000');
+});
+
 <%- contentFor('body') %>
 
 <div class="min-h-screen bg-gray-50 dark:bg-dark-bg pt-20 pb-12">
