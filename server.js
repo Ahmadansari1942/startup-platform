@@ -1,19 +1,20 @@
 const express = require('express');
 const path = require('path');
+const net = require('net');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const DEFAULT_PORT = 3000;
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// View engine setup
+// View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// ========== HARDCODED DATA (No Database Needed!) ==========
+// ========== HARDCODED DATA ==========
 const dashboardData = {
   stats: {
     revenue: { current: 45231, growth: 26.8 },
@@ -48,20 +49,35 @@ const dashboardData = {
   ]
 };
 
-// ========== ROUTES ==========
+// ========== AUTO PORT FINDER FUNCTION ==========
+function findFreePort(startPort) {
+  return new Promise((resolve, reject) => {
+    const server = net.createServer();
+    server.listen(startPort, () => {
+      const port = server.address().port;
+      server.close(() => resolve(port));
+    });
+    server.on('error', (err) => {
+      if (err.code === 'EADDRINUSE') {
+        findFreePort(startPort + 1).then(resolve, reject);
+      } else {
+        reject(err);
+      }
+    });
+  });
+}
 
-// Dashboard Route - YAHAN DATA BHEJ RAHE HAIN!
+// ========== ROUTES ==========
 app.get('/', (req, res) => {
   res.render('dashboard', {
     title: 'Dashboard',
     unreadCount: 3,
-    stats: dashboardData.stats,                    // ✅ Yeh stats object bheja
-    charts: dashboardData.charts,                  // ✅ Yeh charts object bheja
-    recentTransactions: dashboardData.recentTransactions  // ✅ Yeh transactions bheje
+    stats: dashboardData.stats,
+    charts: dashboardData.charts,
+    recentTransactions: dashboardData.recentTransactions
   });
 });
 
-// About Page
 app.get('/about', (req, res) => {
   res.render('about', { 
     title: 'About Us',
@@ -72,39 +88,26 @@ app.get('/about', (req, res) => {
   });
 });
 
-// Contact Page
 app.get('/contact', (req, res) => {
   res.render('contact', { title: 'Contact Us' });
 });
 
-// API Endpoint
 app.get('/api/data', (req, res) => {
   res.json(dashboardData);
 });
 
-// Health Check
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', time: new Date().toISOString() });
 });
 
-// 404 Handler
 app.use((req, res) => {
   res.status(404).send('Page Not Found');
 });
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📊 Dashboard: http://localhost:${PORT}/`);
-});
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-  console.log(`📊 Dashboard: http://localhost:${PORT}/`);
-  console.log(`🔌 API: http://localhost:${PORT}/api/stats`);
-});
-// Start server with auto port finder
+// ========== START SERVER ==========
 findFreePort(DEFAULT_PORT)
   .then(port => {
-    app.listen(port, '127.0.0.1', () => { // Force IPv4
+    app.listen(port, () => {
       console.log(`🚀 Server running on http://localhost:${port}`);
       console.log(`📊 Dashboard: http://localhost:${port}/`);
       console.log(`🔌 API: http://localhost:${port}/api/data`);
