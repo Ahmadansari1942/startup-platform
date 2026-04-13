@@ -146,31 +146,36 @@
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                <!-- Revenue Chart -->
-                <div class="lg:col-span-2 bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Revenue Overview</h3>
-                    <canvas id="revenueChart" height="100"></canvas>
-                </div>
+           <!-- Charts Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+    
+    <!-- Revenue Chart -->
+    <div class="lg:col-span-2 bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Revenue Overview</h3>
+        <div style="position: relative; height: 300px;">
+            <canvas id="revenueChart"></canvas>
+        </div>
+    </div>
 
-                <!-- Traffic Sources -->
-                <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Traffic Sources</h3>
-                    <canvas id="trafficChart"></canvas>
-                    <div class="mt-4 space-y-2">
-                        <% trafficSources.labels.forEach((label, index) => { %>
-                            <div class="flex items-center justify-between text-sm">
-                                <span class="flex items-center">
-                                    <span class="w-3 h-3 rounded-full mr-2" style="background-color: <%= trafficSources.colors[index] %>"></span>
-                                    <span class="text-gray-700 dark:text-gray-300"><%= label %></span>
-                                </span>
-                                <span class="text-gray-500 dark:text-gray-400"><%= trafficSources.data[index] %>%</span>
-                            </div>
-                        <% }) %>
-                    </div>
+    <!-- Traffic Sources -->
+    <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Traffic Sources</h3>
+        <div style="position: relative; height: 200px;">
+            <canvas id="trafficChart"></canvas>
+        </div>
+        <div class="mt-4 space-y-2">
+            <% charts.trafficSources.labels.forEach((label, index) => { %>
+                <div class="flex items-center justify-between text-sm">
+                    <span class="flex items-center">
+                        <span class="w-3 h-3 rounded-full mr-2" style="background-color: <%= charts.trafficSources.colors[index] %>"></span>
+                        <span class="text-gray-700 dark:text-gray-300"><%= label %></span>
+                    </span>
+                    <span class="text-gray-500 dark:text-gray-400"><%= charts.trafficSources.data[index] %>%</span>
                 </div>
-            </div>
+            <% }) %>
+        </div>
+    </div>
+</div>
 
             <!-- Recent Activity & Transactions -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -247,9 +252,104 @@
     </footer>
 
     <!-- Scripts -->
-    <script>
-        // Dark Mode Toggle
-        function toggleDark() {
-            const html = document.documentElement;
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Dark Mode Toggle
+    function toggleDark() {
+        const html = document.documentElement;
+        if (html.classList.contains('dark')) {
+            html.classList.remove('dark');
+            localStorage.theme = 'light';
+        } else {
+            html.classList.add('dark');
+            localStorage.theme = 'dark';
+        }
+    }
+
+    // Initialize Charts when DOM is ready
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        // Check if canvas elements exist
+        const revenueCanvas = document.getElementById('revenueChart');
+        const trafficCanvas = document.getElementById('trafficChart');
+        
+        if (!revenueCanvas || !trafficCanvas) {
+            console.error('Canvas elements not found!');
+            return;
+        }
+
+        // Get contexts
+        const revenueCtx = revenueCanvas.getContext('2d');
+        const trafficCtx = trafficCanvas.getContext('2d');
+
+        // Revenue Chart
+        const revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: <%- JSON.stringify(charts.revenueChart.labels) %>,
+                datasets: [{
+                    label: 'Revenue ($)',
+                    data: <%- JSON.stringify(charts.revenueChart.data) %>,
+                    borderColor: '#3B82F6',
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderWidth: 3,
+                    tension: 0.4,
+                    fill: true,
+                    pointBackgroundColor: '#3B82F6',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toLocaleString();
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Traffic Chart (Doughnut)
+        const trafficChart = new Chart(trafficCtx, {
+            type: 'doughnut',
+            data: {
+                labels: <%- JSON.stringify(charts.trafficSources.labels) %>,
+                datasets: [{
+                    data: <%- JSON.stringify(charts.trafficSources.data) %>,
+                    backgroundColor: <%- JSON.stringify(charts.trafficSources.colors) %>,
+                    borderWidth: 0,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        console.log('✅ Charts initialized successfully!');
+    });
+</script>
