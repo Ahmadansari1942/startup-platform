@@ -101,3 +101,15 @@ app.listen(PORT, () => {
   console.log(`📊 Dashboard: http://localhost:${PORT}/`);
   console.log(`🔌 API: http://localhost:${PORT}/api/stats`);
 });
+// Start server with auto port finder
+findFreePort(DEFAULT_PORT)
+  .then(port => {
+    app.listen(port, '127.0.0.1', () => { // Force IPv4
+      console.log(`🚀 Server running on http://localhost:${port}`);
+      console.log(`📊 Dashboard: http://localhost:${port}/`);
+      console.log(`🔌 API: http://localhost:${port}/api/data`);
+    });
+  })
+  .catch(err => {
+    console.error('❌ Failed to start server:', err);
+  });
