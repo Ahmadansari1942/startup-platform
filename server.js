@@ -5,16 +5,14 @@ const net = require('net');
 const app = express();
 const DEFAULT_PORT = 3000;
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// View engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// ========== HARDCODED DATA ==========
+// ========== COMPLETE DATA ==========
 const dashboardData = {
   stats: {
     revenue: { current: 45231, growth: 26.8 },
@@ -46,16 +44,21 @@ const dashboardData = {
     { id: 'TXN-003', customer: 'Mike Chen', amount: 199, date: '2024-01-14', status: 'pending' },
     { id: 'TXN-004', customer: 'Emma Wilson', amount: 149, date: '2024-01-13', status: 'completed' },
     { id: 'TXN-005', customer: 'David Brown', amount: 399, date: '2024-01-13', status: 'failed' }
-  ], // ✅ COMMA ADDED HERE
-  notifications: [ // ✅ NOW INSIDE dashboardData
+  ],
+  // ✅ NOTIFICATIONS ADDED
+  notifications: [
     { id: 1, title: 'New Order', message: 'Ahmad Khan purchased SaaS Starter Kit for $299', time: '2 min ago', read: false, icon: 'fa-shopping-bag', color: 'green' },
     { id: 2, title: 'New Review', message: 'Fatima Ali gave 5-star rating to E-commerce Pro', time: '15 min ago', read: false, icon: 'fa-star', color: 'yellow' },
     { id: 3, title: 'System Update', message: 'Platform updated to v2.5.0 with new features', time: '1 hour ago', read: true, icon: 'fa-sync', color: 'blue' },
     { id: 4, title: 'Low Stock', message: 'Mobile App Template inventory running low', time: '3 hours ago', read: false, icon: 'fa-exclamation-triangle', color: 'red' },
     { id: 5, title: 'New Message', message: 'You have a new message from support team', time: '5 hours ago', read: true, icon: 'fa-envelope', color: 'purple' }
-  ] // ✅ NO COMMA NEEDED (last property)
-}; // ✅ PROPERLY CLOSED
-// ========== AUTO PORT FINDER FUNCTION ==========
+  ]
+};
+
+// Calculate unread count
+const unreadCount = dashboardData.notifications.filter(n => !n.read).length;
+
+// ========== AUTO PORT FINDER ==========
 function findFreePort(startPort) {
   return new Promise((resolve, reject) => {
     const server = net.createServer();
@@ -77,10 +80,11 @@ function findFreePort(startPort) {
 app.get('/', (req, res) => {
   res.render('dashboard', {
     title: 'Dashboard',
-    unreadCount: 3,
+    unreadCount: unreadCount, // ✅ DYNAMIC COUNT
     stats: dashboardData.stats,
     charts: dashboardData.charts,
-    recentTransactions: dashboardData.recentTransactions
+    recentTransactions: dashboardData.recentTransactions,
+    notifications: dashboardData.notifications // ✅ NOTIFICATIONS SENT
   });
 });
 
@@ -116,7 +120,6 @@ findFreePort(DEFAULT_PORT)
     app.listen(port, () => {
       console.log(`🚀 Server running on http://localhost:${port}`);
       console.log(`📊 Dashboard: http://localhost:${port}/`);
-      console.log(`🔌 API: http://localhost:${port}/api/data`);
     });
   })
   .catch(err => {
