@@ -1,260 +1,104 @@
 const express = require('express');
 const path = require('path');
-const expressLayouts = require('express-ejs-layouts');
+const fs = require('fs').promises;
 
 const app = express();
+const PORT = 3000;
 
-// EJS setup
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// View engine setup
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-app.use(expressLayouts);
-app.set('layout', 'layout');
+// Helper: Load mock data
+async function loadData(filename) {
+  try {
+    const data = await fs.readFile(path.join(__dirname, 'data', filename), 'utf8');
+    return JSON.parse(data);
+  } catch (error) {
+    console.error(`Error loading ${filename}:`, error);
+    return null;
+  }
+}
 
-// static files
-app.use(express.static(path.join(__dirname, 'public')));
+// ========== ROUTES ==========
 
-// route
-app.get('/', (req, res) => {
-    res.render('dashboard', {
-        unreadCount: 3,
-        stats: {
-            revenue: { current: 5000, growth: 12 },
-            users: { current: 1200, growth: 8 },
-            orders: { current: 320, growth: 5 },
-            products: { current: 80, growth: 3 }
-        },
-        charts: {
-            revenueChart: {
-                labels: ['Jan', 'Feb', 'Mar'],
-                data: [1000, 2000, 3000]
-            },
-            trafficSources: {
-                labels: ['Google', 'Facebook', 'Direct'],
-                data: [50, 30, 20],
-                colors: ['#3B82F6', '#8B5CF6', '#10B981']
-            },
-            recentActivity: [
-                { user: 'Ahmad', action: 'bought', item: 'product', time: '2 min ago', amount: 50 }
-            ]
-        },
-        recentTransactions: [
-            { customer: 'Ali', id: '#123', amount: 100, date: 'Today', status: 'completed' }
-        ]
-    });
+// Home/Dashboard Route
+app.get('/', async (req, res) => {
+  // Load data from JSON files (agar hain to)
+  const analytics = await loadData('analytics.json') || getDefaultData();
+  
+  res.render('dashboard', {
+    title: 'Dashboard',
+    unreadCount: 3,
+    stats: analytics.stats,
+    charts: analytics.charts,
+    recentTransactions: analytics.recentTransactions || []
+  });
 });
 
-app.listen(3000, () => {
-    console.log('🚀 Server running on http://localhost:3000');
+// About Page
+app.get('/about', (req, res) => {
+  res.render('about', { title: 'About Us' });
 });
 
-<%- contentFor('body') %>
+// Contact Page  
+app.get('/contact', (req, res) => {
+  res.render('contact', { title: 'Contact Us' });
+});
 
-<div class="min-h-screen bg-gray-50 dark:bg-dark-bg pt-20 pb-12">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    
-    <!-- Header -->
-    <div class="mb-8 flex justify-between items-center">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-        <p class="text-gray-600 dark:text-gray-400 mt-1">Welcome back! Here's what's happening.</p>
-      </div>
-      <div class="flex items-center space-x-4">
-        <span class="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm font-medium">
-          <i class="fas fa-circle text-xs mr-1 animate-pulse"></i>
-          Live
-        </span>
-        <button class="p-2 bg-white dark:bg-dark-card rounded-lg shadow hover:shadow-md transition-shadow relative">
-          <i class="fas fa-bell text-gray-600 dark:text-gray-400"></i>
-          <% if (unreadCount > 0) { %>
-            <span class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
-              <%= unreadCount %>
-            </span>
-          <% } %>
-        </button>
-      </div>
-    </div>
+// API Endpoints
+app.get('/api/stats', async (req, res) => {
+  const data = await loadData('analytics.json') || getDefaultData();
+  res.json(data);
+});
 
-    <!-- Stats Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-      <!-- Revenue -->
-      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm hover-card">
-        <div class="flex items-center justify-between mb-4">
-          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-            <i class="fas fa-dollar-sign text-blue-600 text-xl"></i>
-          </div>
-          <span class="text-green-500 text-sm font-medium">+<%= stats.revenue.growth %>%</span>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-900 dark:text-white">$<%= stats.revenue.current.toLocaleString() %></h3>
-        <p class="text-gray-500 dark:text-gray-400 text-sm">Total Revenue</p>
-      </div>
+// Health check
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', time: new Date().toISOString() });
+});
 
-      <!-- Users -->
-      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm hover-card">
-        <div class="flex items-center justify-between mb-4">
-          <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center">
-            <i class="fas fa-users text-purple-600 text-xl"></i>
-          </div>
-          <span class="text-green-500 text-sm font-medium">+<%= stats.users.growth %>%</span>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-900 dark:text-white"><%= stats.users.current.toLocaleString() %></h3>
-        <p class="text-gray-500 dark:text-gray-400 text-sm">Active Users</p>
-      </div>
-
-      <!-- Orders -->
-      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm hover-card">
-        <div class="flex items-center justify-between mb-4">
-          <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
-            <i class="fas fa-shopping-cart text-orange-600 text-xl"></i>
-          </div>
-          <span class="text-green-500 text-sm font-medium">+<%= stats.orders.growth %>%</span>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-900 dark:text-white"><%= stats.orders.current %></h3>
-        <p class="text-gray-500 dark:text-gray-400 text-sm">Total Orders</p>
-      </div>
-
-      <!-- Products -->
-      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm hover-card">
-        <div class="flex items-center justify-between mb-4">
-          <div class="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-lg flex items-center justify-center">
-            <i class="fas fa-box text-pink-600 text-xl"></i>
-          </div>
-          <span class="text-green-500 text-sm font-medium">+<%= stats.products.growth %>%</span>
-        </div>
-        <h3 class="text-2xl font-bold text-gray-900 dark:text-white"><%= stats.products.current %></h3>
-        <p class="text-gray-500 dark:text-gray-400 text-sm">Products</p>
-      </div>
-    </div>
-
-    <!-- Charts Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-      <!-- Revenue Chart -->
-      <div class="lg:col-span-2 bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Revenue Overview</h3>
-        <canvas id="revenueChart" height="100"></canvas>
-      </div>
-
-      <!-- Traffic Sources -->
-      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Traffic Sources</h3>
-        <canvas id="trafficChart"></canvas>
-        <div class="mt-4 space-y-2">
-          <% charts.trafficSources.labels.forEach((label, index) => { %>
-            <div class="flex items-center justify-between text-sm">
-              <span class="flex items-center">
-                <span class="w-3 h-3 rounded-full mr-2" style="background-color: <%= charts.trafficSources.colors[index] %>"></span>
-                <%= label %>
-              </span>
-              <span class="text-gray-600 dark:text-gray-400"><%= charts.trafficSources.data[index] %>%</span>
-            </div>
-          <% }) %>
-        </div>
-      </div>
-    </div>
-
-    <!-- Recent Activity & Transactions -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <!-- Recent Activity -->
-      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Recent Activity</h3>
-        <div class="space-y-4">
-          <% charts.recentActivity.forEach(activity => { %>
-            <div class="flex items-center space-x-4 p-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-colors">
-              <div class="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center text-white font-bold">
-                <%= activity.user.charAt(0) %>
-              </div>
-              <div class="flex-1">
-                <p class="text-sm font-medium text-gray-900 dark:text-white">
-                  <%= activity.user %> 
-                  <span class="text-gray-500 dark:text-gray-400"><%= activity.action %></span>
-                  <%= activity.item %>
-                </p>
-                <p class="text-xs text-gray-500 dark:text-gray-400"><%= activity.time %></p>
-              </div>
-              <% if (activity.amount) { %>
-                <span class="text-green-500 font-medium">$<%= activity.amount %></span>
-              <% } %>
-            </div>
-          <% }) %>
-        </div>
-      </div>
-
-      <!-- Recent Transactions -->
-      <div class="bg-white dark:bg-dark-card rounded-xl p-6 shadow-sm">
-        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Recent Transactions</h3>
-        <div class="space-y-3">
-          <% recentTransactions.forEach(txn => { %>
-            <div class="flex items-center justify-between p-3 border-b border-gray-100 dark:border-gray-700 last:border-0">
-              <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-lg flex items-center justify-center
-                  <%= txn.status === 'completed' ? 'bg-green-100 dark:bg-green-900/30 text-green-600' : 
-                      txn.status === 'pending' ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600' : 
-                      'bg-red-100 dark:bg-red-900/30 text-red-600' %>">
-                  <i class="fas <%= txn.status === 'completed' ? 'fa-check' : 
-                                  txn.status === 'pending' ? 'fa-clock' : 
-                                  'fa-times' %>"></i>
-                </div>
-                <div>
-                  <p class="text-sm font-medium text-gray-900 dark:text-white"><%= txn.customer %></p>
-                  <p class="text-xs text-gray-500 dark:text-gray-400"><%= txn.id %></p>
-                </div>
-              </div>
-              <div class="text-right">
-                <p class="text-sm font-bold text-gray-900 dark:text-white">$<%= txn.amount %></p>
-                <p class="text-xs text-gray-500 dark:text-gray-400"><%= txn.date %></p>
-              </div>
-            </div>
-          <% }) %>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  // Revenue Chart
-  const revenueCtx = document.getElementById('revenueChart').getContext('2d');
-  new Chart(revenueCtx, {
-    type: 'line',
-    data: {
-      labels: <%- JSON.stringify(charts.revenueChart.labels) %>,
-      datasets: [{
-        label: 'Revenue ($)',
-        data: <%- JSON.stringify(charts.revenueChart.data) %>,
-        borderColor: '#3B82F6',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-        tension: 0.4,
-        fill: true
-      }]
+// Default data function (agar JSON file na ho)
+function getDefaultData() {
+  return {
+    stats: {
+      revenue: { current: 45231, growth: 26.8 },
+      users: { current: 2350, growth: 11.9 },
+      orders: { current: 1224, growth: 24.9 },
+      products: { current: 89, growth: 17.1 }
     },
-    options: {
-      responsive: true,
-      plugins: { legend: { display: false } },
-      scales: {
-        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
-        x: { grid: { display: false } }
-      }
-    }
-  });
-
-  // Traffic Chart
-  const trafficCtx = document.getElementById('trafficChart').getContext('2d');
-  new Chart(trafficCtx, {
-    type: 'doughnut',
-    data: {
-      labels: <%- JSON.stringify(charts.trafficSources.labels) %>,
-      datasets: [{
-        data: <%- JSON.stringify(charts.trafficSources.data) %>,
-        backgroundColor: <%- JSON.stringify(charts.trafficSources.colors) %>,
-        borderWidth: 0
-      }]
+    charts: {
+      revenueChart: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        data: [12000, 19000, 15000, 25000, 22000, 30000, 28000, 35000, 32000, 38000, 42000, 45231]
+      },
+      trafficSources: {
+        labels: ['Direct', 'Social', 'Organic', 'Referral', 'Email'],
+        data: [35, 25, 20, 15, 5],
+        colors: ['#3B82F6', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444']
+      },
+      recentActivity: [
+        { user: 'Ahmad Khan', action: 'purchased', item: 'SaaS Starter Kit', time: '2 minutes ago', amount: 299 },
+        { user: 'Fatima Ali', action: 'reviewed', item: 'E-commerce Pro', time: '15 minutes ago', rating: 5 },
+        { user: 'Muhammad Usman', action: 'downloaded', item: 'Mobile App Template', time: '1 hour ago' },
+        { user: 'Ayesha Siddiqui', action: 'purchased', item: 'AI Chatbot Integration', time: '2 hours ago', amount: 199 }
+      ]
     },
-    options: {
-      responsive: true,
-      cutout: '70%',
-      plugins: { legend: { display: false } }
-    }
-  });
-</script>
+    recentTransactions: [
+      { id: 'TXN-001', customer: 'Ahmad Khan', amount: 299, date: '2024-01-15', status: 'completed' },
+      { id: 'TXN-002', customer: 'Sarah Johnson', amount: 499, date: '2024-01-14', status: 'completed' },
+      { id: 'TXN-003', customer: 'Mike Chen', amount: 199, date: '2024-01-14', status: 'pending' },
+      { id: 'TXN-004', customer: 'Emma Wilson', amount: 149, date: '2024-01-13', status: 'completed' }
+    ]
+  };
+}
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`📊 Dashboard: http://localhost:${PORT}/`);
+  console.log(`🔌 API: http://localhost:${PORT}/api/stats`);
+});
