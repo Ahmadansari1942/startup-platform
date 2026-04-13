@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | Startup Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: { bg: '#0f172a', card: '#1e293b', text: '#f8fafc' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    </style>
+</head>
+<body class="antialiased bg-gray-50 dark:bg-dark-bg text-gray-900 dark:text-dark-text transition-colors duration-300">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-40 bg-white/80 dark:bg-dark-card/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a href="/" class="flex items-center space-x-2">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-rocket text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold gradient-text">StartupPlatform</span>
+                </a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 font-medium">Dashboard</a>
+                    <a href="/about" class="text-blue-600 font-medium">About</a>
+                    <a href="/contact" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 font-medium">Contact</a>
+                    
+                    <button onclick="toggleDark()" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
+                        <i class="fas fa-sun hidden dark:block"></i>
+                        <i class="fas fa-moon block dark:hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Content -->
+    <div class="min-h-screen pt-20 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <!-- Hero -->
+            <div class="text-center py-16">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4">About <span class="gradient-text">Us</span></h1>
+                <p class="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    Building the future of startups with powerful tools and analytics.
+                </p>
+            </div>
+
+            <!-- Team Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                <% team.forEach(member => { %>
+                    <div class="bg-white dark:bg-dark-card rounded-2xl p-6 shadow-sm text-center hover:shadow-lg transition-all">
+                        <img src="<%= member.image %>" alt="<%= member.name %>" class="w-24 h-24 rounded-full mx-auto mb-4 border-4 border-blue-100 dark:border-blue-900">
+                        <h3 class="text-xl font-bold dark:text-white"><%= member.name %></h3>
+                        <p class="text-blue-600 mb-2"><%= member.role %></p>
+                        <p class="text-gray-600 dark:text-gray-400 text-sm"><%= member.bio %></p>
+                    </div>
+                <% }) %>
+            </div>
+
+            <!-- Stats -->
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white text-center">
+                <div class="grid md:grid-cols-4 gap-8">
+                    <div>
+                        <div class="text-4xl font-bold">10K+</div>
+                        <div class="text-blue-100">Active Users</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold">500+</div>
+                        <div class="text-blue-100">Startups</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold">99.9%</div>
+                        <div class="text-blue-100">Uptime</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold">24/7</div>
+                        <div class="text-blue-100">Support</div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-dark-card border-t border-gray-200 dark:border-gray-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-gray-600 dark:text-gray-400">
+            <p>&copy; 2024 Startup Platform by Ahmad Ansari. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleDark() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                html.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        }
+    </script>
+
+</body>
+</html>
