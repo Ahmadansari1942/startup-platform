@@ -48,7 +48,13 @@ const dashboardData = {
     { id: 'TXN-005', customer: 'David Brown', amount: 399, date: '2024-01-13', status: 'failed' }
   ]
 };
-
+notifications: [
+    { id: 1, title: 'New Order', message: 'Ahmad Khan purchased SaaS Starter Kit for $299', time: '2 min ago', read: false, icon: 'fa-shopping-bag', color: 'green' },
+    { id: 2, title: 'New Review', message: 'Fatima Ali gave 5-star rating to E-commerce Pro', time: '15 min ago', read: false, icon: 'fa-star', color: 'yellow' },
+    { id: 3, title: 'System Update', message: 'Platform updated to v2.5.0 with new features', time: '1 hour ago', read: true, icon: 'fa-sync', color: 'blue' },
+    { id: 4, title: 'Low Stock', message: 'Mobile App Template inventory running low', time: '3 hours ago', read: false, icon: 'fa-exclamation-triangle', color: 'red' },
+    { id: 5, title: 'New Message', message: 'You have a new message from support team', time: '5 hours ago', read: true, icon: 'fa-envelope', color: 'purple' }
+]
 // ========== AUTO PORT FINDER FUNCTION ==========
 function findFreePort(startPort) {
   return new Promise((resolve, reject) => {
